@@ -408,5 +408,6 @@ function Assignments() {
     );
 
 }
+}
 
 export default Assignments;
