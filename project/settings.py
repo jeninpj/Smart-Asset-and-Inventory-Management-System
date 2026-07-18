@@ -171,15 +171,32 @@ REST_FRAMEWORK = {
 
 
 # ==========================================
-# CORS CONFIGURATION (Production Safe)
+# CORS CONFIGURATION (TEMPORARY DEBUG MODE)
 # ==========================================
-CORS_ALLOWED_ORIGINS = os.environ.get(
-    'CORS_ALLOWED_ORIGINS', 
-    'http://localhost:3000,http://127.0.0.1:3000,https://assethub-frontend.onrender.com'
-).split(',')
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://assethub-frontend.onrender.com',
+]
 
-# Allow credentials (important for some JWT setups)
 CORS_ALLOW_CREDENTIALS = True
-
-# Explicitly disable allowing ALL origins in production
-CORS_ALLOW_ALL_ORIGINS = False 
+CORS_ALLOW_ALL_ORIGINS = True  # TEMPORARY - for debugging
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
