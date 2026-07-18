@@ -27,8 +27,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-m^)in%ts@eodo81+7g_nk
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ['true', '1', 'yes']
 
 # Comma-separated list of allowed hosts (e.g., "yourdomain.com,localhost,127.0.0.1")
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
+# Change this line in settings.py:
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 # ==========================================
 # APPLICATION DEFINITION
