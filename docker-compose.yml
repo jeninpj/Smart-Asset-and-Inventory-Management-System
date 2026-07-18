@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: assethub_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: assethub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Django Backend
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: assethub_django
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn --bind 0.0.0.0:8000 --workers 3 project.wsgi:application"
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_NAME=assethub
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123
+      - DB_HOST=db
+      - DB_PORT=5432
+      - SECRET_KEY=your_super_secret_production_key_here
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+
+  # 3. React Frontend
+  react:
+    build:
+      context: ./assethub
+      dockerfile: Dockerfile
+    container_name: assethub_react
+    expose:
+      - "80"
+
+  # 4. NGINX Load Balancer / Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: assethub_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - django
+      - react
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
