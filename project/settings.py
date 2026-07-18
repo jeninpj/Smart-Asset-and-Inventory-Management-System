@@ -26,12 +26,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-m^)in%ts@eodo81+7g_nk
 # Defaults to False in production, True locally if not set
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ['true', '1', 'yes']
 
-# Comma-separated list of allowed hosts (e.g., "yourdomain.com,localhost,127.0.0.1")
-# Change this line in settings.py:
+# Option 1: Allow all Render subdomains (Recommended for now)
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+# OR Option 2: Be specific (add both URLs)
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "assethub-backend.onrender.com",
+    "assethub-backend-3k5e.onrender.com",  # ← Add this exact URL
+    ".onrender.com",  # ← This allows ALL Render subdomains
 ]
 
 # ==========================================
@@ -184,5 +188,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://assethub-frontend.onrender.com",
-]
+       "https://assethub-frontend.onrender.com",
+       "https://assethub-backend-3k5e.onrender.com",
+   ]
