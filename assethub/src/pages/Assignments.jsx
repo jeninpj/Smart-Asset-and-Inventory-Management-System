@@ -28,18 +28,32 @@ function Assignments() {
     }, []);
 
     const fetchAssignments = async () => {
-        const response = await api.get("api/assignments/");
-        setAssignments(response.data.results);
+        try {
+            const response = await api.get("/api/assignments/");
+            console.log("Assignments:", response.data);
+            // Handle both paginated and non-paginated responses
+            setAssignments(response.data.results || response.data);
+        } catch (error) {
+            console.error("Error:", error.response?.data);
+        }
     };
 
     const fetchAssets = async () => {
-        const response = await api.get("api/assets/");
-        setAssets(response.data.results);
+        try {
+            const response = await api.get("/api/assets/");
+            setAssets(response.data.results || response.data);
+        } catch (error) {
+            console.error("Error:", error.response?.data);
+        }
     };
 
     const fetchUsers = async () => {
-        const response = await api.get("api/users/");
-        setUsers(response.data.results);
+        try {
+            const response = await api.get("/api/users/");
+            setUsers(response.data.results || response.data);
+        } catch (error) {
+            console.error("Error:", error.response?.data);
+        }
     };
 
     const handleSubmit = async (e) => {
