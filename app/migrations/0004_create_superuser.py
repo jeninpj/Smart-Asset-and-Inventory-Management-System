@@ -21,7 +21,7 @@ def remove_superuser(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app', '00XX_previous_migration'),  # Django will auto-fill this
+        ('app', '0003_chatmessage'),  
         ('auth', '0012_alter_user_first_name_max_length'),
     ]
 
