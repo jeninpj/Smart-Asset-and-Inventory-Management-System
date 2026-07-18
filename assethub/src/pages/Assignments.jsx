@@ -60,6 +60,8 @@ function Assignments() {
 
         e.preventDefault();
 
+        console.log("📤 Sending data:", formData);
+
         if (
             !formData.asset ||
             !formData.employee ||
@@ -77,37 +79,30 @@ function Assignments() {
             return;
         }
 
-        if (editId) {
-
-            await api.put(
-                `api/assignments/${editId}/`,
-                formData
-            );
-
+        try {
+            if (editId) {
+                await api.put(`api/assignments/${editId}/`, formData);
+            } else {
+                const response = await api.post("api/assignments/", formData);
+                console.log("✅ Success:", response.data);
+            }
+            
+            fetchAssignments();
+            setFormData({
+                asset: "",
+                employee: "",
+                date_assigned: "",
+                date_returned: "",
+            });
+            setEditId(null);
+            
+        } catch (error) {
+            console.error("❌ POST failed:");
+            console.error("Status:", error.response?.status);
+            console.error("Data:", error.response?.data);  // ← This will show the validation errors!
+            console.error("Sent data:", formData);
+            alert("Failed to create assignment. Check console for details.");
         }
-
-        else {
-
-            await api.post(
-                "api/assignments/",
-                formData
-            );
-
-        }
-
-        fetchAssignments();
-
-        setFormData({
-            asset: "",
-            employee: "",
-            date_assigned: "",
-            date_returned: "",
-        });
-
-        setEditId(null);
-
-    };
-
     const handleEdit = (assignment) => {
 
         setFormData({
