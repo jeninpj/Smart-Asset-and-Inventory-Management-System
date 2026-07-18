@@ -173,11 +173,13 @@ REST_FRAMEWORK = {
 # ==========================================
 # CORS CONFIGURATION (Production Safe)
 # ==========================================
-# In production, replace '*' with your actual frontend domain (e.g., "https://yourdomain.com")
 CORS_ALLOWED_ORIGINS = os.environ.get(
     'CORS_ALLOWED_ORIGINS', 
-    'http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1'
+    'http://localhost:3000,http://127.0.0.1:3000,https://assethub-frontend.onrender.com'
 ).split(',')
 
-# Only allow this in development. Set to False in production.
-CORS_ALLOW_ALL_ORIGINS = DEBUG 
+# Allow credentials (important for some JWT setups)
+CORS_ALLOW_CREDENTIALS = True
+
+# Explicitly disable allowing ALL origins in production
+CORS_ALLOW_ALL_ORIGINS = False 
